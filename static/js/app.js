@@ -48,7 +48,7 @@ function buildCharts(sample) {
     let trace1 = {
       x: otu_ids,
       y: sample_values,
-      hovertext: otu_labels,
+      text: otu_labels,
       mode: "markers",
       marker: {
         size: sample_values,
@@ -85,7 +85,7 @@ function buildCharts(sample) {
     let trace2 = {
       x: top10_values,
       y: ids,
-      hovertext: top10_labels,
+      text: top10_labels,
       type: "bar",
       orientation: "h"
 };
