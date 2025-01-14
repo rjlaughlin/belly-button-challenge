@@ -47,12 +47,4 @@ Before starting, ensure you have the following installed:
     - Plotly.js
 
 ## Running the Analysis
-- Clone the repository and navigate to the project directory.
-- Install dependencies indicated above.
-- Open the dashboard using one of the following methods:
-    1. Open using the Live Server extension within Visual Studio.
-    2. Start a local server using Python
-     ```bash
-     python -m http.server
-     ```
-     Open the dashboard in a web browser at `http://localhost:8000`.
+- Access the dashboard: `https://rjlaughlin.github.io/belly-button-challenge/`

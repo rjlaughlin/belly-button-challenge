@@ -3,49 +3,26 @@ function buildMetadata(sample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
     // get the metadata field
-    //console.log(data);
-
-    let metadata = data.metadata
-    
+    let metadata = data.metadata;
+  
 
     // Filter the metadata for the object with the desired sample number
     let result1 = metadata.filter(sampleObj => sampleObj.id == sample)[0];
-    console.log('result1')
-    console.log(result1)
+    console.log(result1);
 
     // Use d3 to select the panel with id of `#sample-metadata`
-      let metadataPanel = d3.select('#sample-metadata')
+    let metadataPanel = d3.select('#sample-metadata');
 
     // Use `.html("") to clear any existing metadata
     metadataPanel.html("");
 
-    // Inside a loop, you will need to use d3 to append new
-    // tags for each key-value in the filtered metadata.
-    
-    // for (let i = 0; i < searchResults.length; i++) {
-    //   row = searchResults[i];
-    //   names.push(row.pair);
-    //   greekNames.push(row.greekName);
-    //   romanNames.push(row.romanName);
-    //   greekSearchResults.push(row.greekSearchResults);
-    //   romanSearchResults.push(row.romanSearchResults);
-    // }
-    
-    // metadataPanel.append("h6").text("Demographic Info<");
-
-    // Object.entries(result1).forEach(([key, value]) => {
-    //   metadataPanel.append("h7").text(`${key.toUpperCase()}: ${value}`);
-    // });
-
+    // Add the sample data to the metadataPanel
     metadataPanel.html(
       Object.entries(result1)
         .map(([key, value]) => `${key.toUpperCase()}: ${value}<br>`)
         .join("")
     );
-
-
   });
-  
 }
 
 // function to build both charts
@@ -70,13 +47,13 @@ function buildCharts(sample) {
     // Build a Bubble Chart
     let trace1 = {
       x: otu_ids,
-      text: otu_labels,
       y: sample_values,
+      hovertext: otu_labels,
       mode: "markers",
       marker: {
-        size: sample_values, // Bubble sizes based on sample values
-        color: otu_ids, // Optional: Color bubbles based on otu_ids
-        colorscale: "Earth" // Optional: Add a colorscale for better visualization
+        size: sample_values,
+        color: otu_ids,
+        colorscale: "Earth"
       }
     };
     
@@ -92,11 +69,11 @@ function buildCharts(sample) {
     Plotly.newPlot("bubble", data1, layout1);
 
     // For the Bar Chart, map the otu_ids to a list of strings for your yticks
+    // Don't forget to slice and reverse the input data appropriately
     
     let top10_ids = otu_ids.slice(0, 10).reverse();
     let top10_labels = otu_labels.slice(0, 10).reverse();
     let top10_values = sample_values.slice(0, 10).reverse();
-
 
     let ids = top10_ids.map(function(id) {
       return `OTU ${id} `;
@@ -104,17 +81,15 @@ function buildCharts(sample) {
   
 
     // Build a Bar Chart
-    // Don't forget to slice and reverse the input data appropriately
-
+    
     let trace2 = {
       x: top10_values,
       y: ids,
-      text: top10_labels,
+      hovertext: top10_labels,
       type: "bar",
       orientation: "h"
 };
     
-
     let data2 = [trace2];
     let layout2 = {
       title: `Top 10 Bacteria Cultures Found`,
@@ -144,17 +119,18 @@ function init() {
     data.names.forEach((sample) => {
       dropdownMenu.append("option").text(sample).property("value", sample);
     });
+    
     // Get the first sample from the list
     let firstSample = data.names[0];
   
     // Select all option elements inside the dropdown
-  let options = dropdownMenu.selectAll("option");
+    let options = dropdownMenu.selectAll("option");
   
     // Find the longest option text
     let longestOption = d3.max(options.nodes(), (option) => option.textContent.length);
 
     // Set the width of the dropdown to the length of the longest option
-    dropdownMenu.style("width", `${longestOption * 15}px`);  // Multiply by a factor (e.g., 10px per character)
+    dropdownMenu.style("width", `${longestOption * 15}px`);
     
     // Build charts and metadata panel with the first sample
     buildCharts(firstSample)
@@ -177,7 +153,6 @@ function optionChanged(newSample) {
     
       // Call the second function
       buildCharts(selectedSample);
-
 
     };
 
